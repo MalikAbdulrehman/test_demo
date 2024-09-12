@@ -1,0 +1,194 @@
+{{ 'lookbook.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  
+  {% for block in section.blocks %}
+  
+    .image-dot--{{ block.id }}{
+      top:{{ block.settings.position-top }}%;
+      left:{{ block.settings.position-left }}%;
+      transform:translate(-{{ block.settings.position-left }}% , -{{ block.settings.position-top }}% )
+    }
+  
+  {% endfor %}
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{% endstyle %}
+
+<div class="lookbook-gallery section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="lookbook-gallery-main">
+      <div class="lookbook-gallery-left">
+        {% if section.settings.img != blank %}
+          <img src="{{ section.settings.img | img_url:'master' }}">
+        {% endif %}
+        <div class="lookbook-dots">
+          {% for block in section.blocks %}
+            <span class="image-dot--{{ block.id }}" dots-attr="{{ forloop.index }}"></span>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="lookbook-gallery-right">
+        {% for block in section.blocks %}
+          {% assign product = block.settings.Product %}
+          <div  slider-attr="{{ forloop.index }}" class="lookbook-gallery-right-main {% if forloop.first%} active {% endif %} ">
+            <div class="lookbook-gallery-right-media {%- if product.media[1] %} scnd-img {% endif %}">
+            {% if product.featured_image != blank %}
+              <img src="{{ product.featured_image | img_url:'master' }}">
+              {% endif %}
+              {%- if product.media[1] != null -%}
+                <img src="{{ product.media[1] | img_url:'master' }}">
+              {% endif %}
+            </div>
+            <div class="lookbook-gallery-prod-info">
+              <p>{{ product.title }}</p>
+              <p>{{ product.price | money }}</p>
+              </div>
+            <div class="lookbook-gallery-prod--button">
+              {%- form 'product',
+                  product,
+                  id: product_form_id,
+                  class: 'form',
+                  novalidate: 'novalidate',
+                  data-type: 'add-to-cart-form'
+                -%}
+                  <input
+                    type="hidden"
+                    name="id"
+                    value="{{ product.selected_or_first_available_variant.id }}"
+                    class="product-variant-id"
+                    {% if product.selected_or_first_available_variant.available == false %}
+                      disabled
+                    {% endif %}
+                  >
+                  <button
+                    id="{{ product_form_id }}-submit"
+                    type="submit"
+                    name="add"
+                    class="quick-add__submit button button--full-width button--secondary{% if horizontal_quick_add %} card--horizontal__quick-add{% endif %}"
+                    aria-haspopup="dialog"
+                    aria-labelledby="{{ product_form_id }}-submit title-{{ section_id }}-{{ product.id }}"
+                    aria-live="polite"
+                    data-sold-out-message="true"
+                    {% if product.selected_or_first_available_variant.available == false %}
+                      disabled
+                    {% endif %}
+                  >
+                    <span>
+                      {%- if product.selected_or_first_available_variant.available -%}
+                        {{ 'products.product.add_to_cart' | t }}
+                      {%- else -%}
+                        {{ 'products.product.sold_out' | t }}
+                      {%- endif -%}
+                    </span>
+                    <span class="sold-out-message hidden">
+                      {{ 'products.product.sold_out' | t }}
+                    </span>
+                    {%- if horizontal_quick_add -%}
+                      <span class="icon-wrap">{% render 'icon-plus' %}</span>
+                    {%- endif -%}
+                    {%- render 'loading-spinner' -%}
+                  </button>
+                {%- endform -%}
+            </div>
+          </div>
+        {% endfor %}
+        <div class="lookbook-dots lookbook-gallery-right-dots">
+          {% for block in section.blocks %}
+            <span dots-attr="{{ forloop.index }}" {% if forloop.first%} class="active" {% endif %}  ></span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'lookbook.js' | asset_url }}" defer="defer"></script>
+
+
+{% schema %}
+  {
+    "name": "LookBook",
+    "settings": [
+      {
+        "type":"image_picker",
+        "id":"img",
+        "label": "Image"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ],
+    "blocks":[
+      {
+        "type": "product",
+        "name":"Product",
+        "settings": [
+          {
+            "type":"product",
+            "label":"Product",
+            "id":"Product"
+          },
+          {
+            
+            "type": "range",
+            "id": "position-top",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Position Top",
+            "default": 36
+          },
+          {
+            "type": "range",
+            "id": "position-left",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "label": "Position left",
+            "default": 36
+          }
+        ]
+      }
+    ],
+    "presets":[
+      {
+        "name": "LookBook"
+      }
+    ]
+  }
+{% endschema %}

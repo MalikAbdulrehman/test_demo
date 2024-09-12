@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "lookbook_gallery_DPdCG8": {
+      "type": "lookbook-gallery",
+      "blocks": {
+        "product_yeKXNC": {
+          "type": "product",
+          "settings": {
+            "Product": "lorem-ipsum-dolor-sit-amet-5",
+            "position-top": 9,
+            "position-left": 78
+          }
+        },
+        "product_CXUPRn": {
+          "type": "product",
+          "settings": {
+            "Product": "lorem-ipsum-dolor-sit-amet-2",
+            "position-top": 69,
+            "position-left": 36
+          }
+        },
+        "product_8WQAQg": {
+          "type": "product",
+          "settings": {
+            "Product": "dogs",
+            "position-top": 36,
+            "position-left": 36
+          }
+        }
+      },
+      "block_order": [
+        "product_yeKXNC",
+        "product_CXUPRn",
+        "product_8WQAQg"
+      ],
+      "settings": {
+        "img": "shopify:\/\/shop_images\/man-poses-in-light-colored-overcoat.jpg",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_cYQkrf": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured collection",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "forest-creation",
+        "products_to_show": 14,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": false,
+        "view_all_style": "solid",
+        "enable_desktop_slider": true,
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "enable_quick_add": false,
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "lookbook_gallery_DPdCG8",
+    "featured_collection_cYQkrf"
+  ]
+}
